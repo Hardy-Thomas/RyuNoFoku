@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://boap686lww2kx"]
+[gd_scene load_steps=6 format=3 uid="uid://boap686lww2kx"]
 
 [ext_resource type="Script" uid="uid://xtcxqvlloahc" path="res://scripts/main.gd" id="1_0wfyh"]
 [ext_resource type="Texture2D" uid="uid://cvevfol3dgglk" path="res://picture/restauran1.png" id="2_sugp2"]
 [ext_resource type="Texture2D" uid="uid://bjsihjf5dtkqk" path="res://picture/sprite/valider_Button/clocheUp.png" id="3_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://d3au7cwdm7iwr" path="res://picture/sprite/valider_Button/clocheDown.png" id="4_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://c0bbudwwfhd02" path="res://scenes/dialog.tscn" id="5_tbgi4"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_0wfyh")
@@ -36,23 +37,40 @@ offset_bottom = 40.0
 
 [node name="Feedback" type="Label" parent="UI"]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 758.0
+offset_top = 447.0
+offset_right = 798.0
+offset_bottom = 470.0
+
+[node name="dialog" parent="UI" instance=ExtResource("5_tbgi4")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 456.0
+offset_top = -13.0
+offset_right = 761.0
+offset_bottom = 659.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="Valider" type="Button" parent="UI"]
 layout_mode = 0
-offset_right = 70.0
-offset_bottom = 36.0
+offset_left = 1040.0
+offset_top = 571.0
+offset_right = 1110.0
+offset_bottom = 607.0
 flat = true
 
 [node name="TextureButton" type="TextureButton" parent="UI/Valider"]
 layout_mode = 0
-offset_left = 1036.0
-offset_top = 578.0
-offset_right = 1929.0
-offset_bottom = 1176.0
+offset_left = 6.0
+offset_top = 7.0
+offset_right = 899.0
+offset_bottom = 605.0
 scale = Vector2(0.115, 0.115)
 texture_normal = ExtResource("3_jyhfs")
 texture_pressed = ExtResource("4_tbgi4")
 
-[connection signal="pressed" from="UI/Valider" to="." method="_on_valider_pressed"]
+[connection signal="pressed" from="UI/Valider/TextureButton" to="." method="_on_texture_button_pressed"]

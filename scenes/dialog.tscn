@@ -1,0 +1,63 @@
+[gd_scene load_steps=5 format=3 uid="uid://c0bbudwwfhd02"]
+
+[ext_resource type="Texture2D" uid="uid://cdvrpnu2a5voo" path="res://picture/sprite/Rating/phone.png" id="1_pkx4w"]
+[ext_resource type="Script" uid="uid://brb0vewjfuu5x" path="res://scenes/dialog.gd" id="2_36pgd"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_36pgd"]
+texture = ExtResource("1_pkx4w")
+
+[sub_resource type="Theme" id="Theme_tmfn4"]
+Panel/styles/panel = SubResource("StyleBoxTexture_36pgd")
+
+[node name="dialog" type="Control"]
+layout_mode = 3
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_right = 147.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_tmfn4")
+script = ExtResource("2_36pgd")
+
+[node name="box" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 54.0
+offset_top = 116.0
+offset_right = 237.0
+offset_bottom = 518.0
+
+[node name="Name" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Customer
+"
+
+[node name="Note" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "5/5 "
+
+[node name="Grade" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "BLALALVBLBLBALLBA"
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 54.0
+offset_top = 116.0
+offset_right = 241.0
+offset_bottom = 519.0
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
