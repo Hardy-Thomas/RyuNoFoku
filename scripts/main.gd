@@ -10,13 +10,14 @@ const INGREDIENTS = [
 	{"name": "Menma", "picture": "res://picture/ingredient/Menma.png"},
 	{"name": "Chashu", "picture": "res://picture/ingredient/Chashu.png"},
 	{"name": "RiceNoodles ", "picture": "res://picture/ingredient/RiceNoodles.png"},
-	{"name": "WheatNoodles ", "picture": "res://picture/ingredient/WheatNoodles.png"},
+	{"name": "WheatNoodles", "picture": "res://picture/ingredient/WheatNoodles.png"},
 	{"name": "SpringOnions", "picture": "res://picture/ingredient/SpringOnions.png"},
 	{"name": "NoriSheets", "picture": "res://picture/ingredient/NoriSheets.png"},
 	{"name": "Narutomaki", "picture": "res://picture/ingredient/Narutomaki.png"}
+
 ]
 
-var secret = ["PorkBroth", "Tare", "ScentedOil", "PickledEggs", "Menma", "Chashu", "WheatNoodles", "SpringOnions", "NoriSheets", "Narutomaki"]
+var secret = ["PorkBroth", "Tare", "ScentedOil", "PickledEggs", "Menma", "Chashu", "SpringOnions", "NoriSheets", "Narutomaki","WheatNoodles"]
 
 
 # Références UI
@@ -104,21 +105,36 @@ func validations():
 		if slot is TextureRect and slot.ingredient_name != "":
 			guessed_recipe.append(slot.ingredient_name)
 	var good = 0 #comptabilisation des bons ingrédients
-	var score = 0
+	var score = 0.0
 	for ingredient in guessed_recipe:
-		if ingredient in secret:
+		if ingredient in secret: 
 			score += 1  # bon ingrédient
 			good += 1
+			print(score)
 		else:
+			print(ingredient)
+			print(secret)
+			if " " == ingredient:
+				print(" ")
+				if not(" " in secret) : 
+					print("VOVOOVOVOOVOVOODSFJFGMKSDJGHMLKSDJGFMLKDSMLKGMSLDKGMDSKGMLKSDGMKDSMLGK") 
 			score -= 2  # ingrédient mauvais ingrédient
+			print("MALUS")
 
 	#MISSING INGREDIENT YOU SUCK LOL
 	for ingredient in secret:
 		if ingredient not in guessed_recipe:
+			print(ingredient)
 			score -= 1  # ingrédient manquant 
+			print("looser")
 		#BON J'AI IMPROVISE LE SCORRING
-		
+	print('HAAAAAAAAAAAAAAAa')
+	
+	print(score)
+	print(score/len(secret))
+	print(score*5/len(secret))	
 	score = score/len(secret)*5
+
 	if score < 0:
 		score = 0
 		
