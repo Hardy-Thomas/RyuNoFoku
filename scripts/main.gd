@@ -98,6 +98,32 @@ func convert_to_grid_container(container):
 	
 	container.queue_free()
 
+func validations():
+	var guessed_recipe = []
+	for slot in board.get_children():
+		if slot is TextureRect and slot.ingredient_name != "":
+			guessed_recipe.append(slot.ingredient_name)
+	var good = 0 #comptabilisation des bons ingrédients
+	var score = 0
+	for ingredient in guessed_recipe:
+		if ingredient in secret:
+			score += 1  # bon ingrédient
+			good += 1
+		else:
+			score -= 2  # ingrédient mauvais ingrédient
+
+	#MISSING INGREDIENT YOU SUCK LOL
+	for ingredient in secret:
+		if ingredient not in guessed_recipe:
+			score -= 1  # ingrédient manquant 
+		#BON J'AI IMPROVISE LE SCORRING
+		
+	score = score/len(secret)*5
+	if score < 0:
+		score = 0
+		
+	print("Score final :", score)
+	return [score,good]
 
 func on_validate():
 	var guess = []
@@ -105,8 +131,15 @@ func _on_texture_button_pressed() -> void:
 	var guess = ""
 	for slot in board.get_children():
 		if slot is TextureRect and slot.ingredient_name != "":
-			current_guess.append(slot.ingredient_name)
-			guess = guess + " and " + slot.ingredient_name
-
-	phone_feedback.display(guess)
+			if guess != "":
+				current_guess.append(slot.ingredient_name)
+				guess = guess + " and " + slot.ingredient_name
+			else:
+				guess = "You served a ramen ball with " + slot.ingredient_name
+	var score 
+	var good
+	var valid = validations()
+	score = valid[0]
+	good = valid[1]
+	phone_feedback.display("Anon",guess + "\n You Have got " +str(good) + " ingredients just like your grandmother receipe",score)
 	print("Recette proposée :", guess)

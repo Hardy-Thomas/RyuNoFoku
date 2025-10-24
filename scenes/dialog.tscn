@@ -42,16 +42,19 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Customer
 "
+autowrap_mode = 3
 
 [node name="Note" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "5/5 "
+autowrap_mode = 3
 
 [node name="Grade" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "BLALALVBLBLBALLBA"
+text = "BLALALVBLBLBALLBAxcvvwvxcfvwvxvwxwvxvwxvwx"
+autowrap_mode = 3
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0
