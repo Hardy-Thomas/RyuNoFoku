@@ -37,21 +37,66 @@ func _ready():
 	setup_dropdowns()
 	setup_board()
 	position_board_bottom()
+	validate_button.pressed.connect(on_validate)
+	add_button.pressed.connect(on_add_ingredient)
 
+func organize_ingredients_by_category():
+	ingredients_by_category = {}
+	for ingredient in INGREDIENTS:
+		var category = ingredient["category"]
+		if not ingredients_by_category.has(category):
+			ingredients_by_category[category] = []
+		ingredients_by_category[category].append(ingredient)
 
-
-
-
-func setup_shelf():
-	if shelf is HBoxContainer:
-		convert_to_grid_container(shelf)
+func setup_dropdowns():
+	# Setup category dropdown
+	category_dropdown.clear()
+	var categories = ingredients_by_category.keys()
+	categories.sort()
 	
-	for ing in INGREDIENTS:
-		var icon = preload("res://scenes/ingredient_icon.tscn").instantiate()
-		icon.texture = load(ing.picture)
-		icon.ingredient_name = ing.name
-		icon.custom_minimum_size = Vector2(64, 64)
-		shelf.add_child(icon)
+	for category in categories:
+		category_dropdown.add_item(category.capitalize())
+	
+	# Connect signal
+	category_dropdown.item_selected.connect(on_category_selected)
+	
+	# Setup initial ingredient dropdown
+	update_ingredient_dropdown(0)
+
+func on_category_selected(index):
+	update_ingredient_dropdown(index)
+
+func update_ingredient_dropdown(category_index):
+	ingredient_dropdown.clear()
+	
+	var categories = ingredients_by_category.keys()
+	categories.sort()
+	var selected_category = categories[category_index]
+	var ingredients = ingredients_by_category[selected_category]
+	
+	for ingredient in ingredients:
+		ingredient_dropdown.add_item(ingredient["name"])
+
+func on_add_ingredient():
+	var category_index = category_dropdown.selected
+	var ingredient_index = ingredient_dropdown.selected
+	
+	var categories = ingredients_by_category.keys()
+	categories.sort()
+	var selected_category = categories[category_index]
+	var ingredients = ingredients_by_category[selected_category]
+	var selected_ingredient = ingredients[ingredient_index]
+	
+	# Ajouter l'ingrédient à la shelf
+	add_ingredient_to_shelf(selected_ingredient)
+
+func add_ingredient_to_shelf(ingredient):
+	var icon = preload("res://scenes/ingredient_icon.tscn").instantiate()
+	icon.texture = load(ingredient["picture"])
+	icon.ingredient_name = ingredient["name"]
+	icon.custom_minimum_size = Vector2(64, 64)
+	icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	shelf.add_child(icon)
 
 
 func setup_board():
