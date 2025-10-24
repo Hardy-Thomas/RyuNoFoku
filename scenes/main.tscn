@@ -30,6 +30,16 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
+[node name="CategoryDropdown" type="OptionButton" parent="UI/IngredientsShelf"]
+layout_mode = 2
+
+[node name="IngredientDropdown" type="OptionButton" parent="UI/IngredientsShelf"]
+layout_mode = 2
+
+[node name="AddButton" type="Button" parent="UI/IngredientsShelf"]
+layout_mode = 2
+text = "ADD"
+
 [node name="RecipeBoard" type="HBoxContainer" parent="UI"]
 layout_mode = 0
 offset_right = 40.0
