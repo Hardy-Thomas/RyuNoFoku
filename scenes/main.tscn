@@ -44,6 +44,7 @@ offset_right = 798.0
 offset_bottom = 470.0
 
 [node name="dialog" parent="UI" instance=ExtResource("5_tbgi4")]
+visible = false
 layout_mode = 0
 anchors_preset = 0
 anchor_left = 0.0

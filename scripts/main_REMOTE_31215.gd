@@ -24,17 +24,14 @@ var secret = ["PorkBroth", "Tare", "ScentedOil", "PickledEggs", "Menma", "Chashu
 @onready var board = $UI/RecipeBoard
 @onready var feedback = $UI/Feedback
 @onready var validate_button = $UI/Valider
-@onready var phone_feedback = $UI/dialog
+
 var current_guess := []
 
 func _ready():
 	setup_shelf()
 	setup_board()
-	
-	
 	position_board_bottom()
-
-
+	validate_button.pressed.connect(on_validate)
 
 func setup_shelf():
 	for ing in INGREDIENTS:
@@ -67,12 +64,8 @@ func position_board_bottom():
 	board.position = Vector2(0, screen_size.y - 100)
 	board.size = Vector2(screen_size.x, 80)
 
-func _on_texture_button_pressed() -> void:
-	var guess = ""
+func on_validate():
+	var guess = []
 	for slot in board.get_children():
-		if slot is TextureRect and slot.ingredient_name != "":
-			current_guess.append(slot.ingredient_name)
-			guess = guess + " and " + slot.ingredient_name
-
-	phone_feedback.display(guess)
+		guess.append(slot.ingredient_name)
 	print("Recette proposée :", guess)

@@ -30,10 +30,6 @@ var current_guess := []
 func _ready():
 	setup_shelf()
 	setup_board()
-	
-	
-	position_board_bottom()
-
 
 
 func setup_shelf():
