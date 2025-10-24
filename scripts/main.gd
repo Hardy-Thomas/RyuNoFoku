@@ -29,6 +29,7 @@ var current_guess := []
 func _ready():
 	setup_shelf()
 	setup_board()
+	validate_button.pressed.connect(on_validate)
 
 
 func setup_shelf():
@@ -46,3 +47,12 @@ func setup_board():
 		slot.texture = load("res://picture/empty_slot.png")
 		slot.custom_minimum_size = Vector2(64, 64)
 		board.add_child(slot)
+
+
+
+
+func on_validate():
+	var guess = []
+	for slot in board.get_children():
+		guess.append(slot.ingredient_name)
+	print("Recette proposée :", guess)

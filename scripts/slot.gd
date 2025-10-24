@@ -9,3 +9,4 @@ func can_drop_data(_pos, data):
 func drop_data(_pos, data):
 	texture = data["texture"]
 	ingredient_name = data["name"]
+	print("Ingrédient déposer: ", ingredient_name)
