@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://1cflbhasqetn"]
+
+[ext_resource type="Script" uid="uid://b3ghaiang6rt7" path="res://scripts/IngredientIcon.gd" id="1_jieiw"]
+
+[node name="IngredientIcon" type="TextureRect"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_jieiw")

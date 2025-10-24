@@ -16,12 +16,33 @@ const INGREDIENTS = [
 	{"name": "Narutomaki", "picture": "res://picture/ingredient/Narutomaki.png"}
 ]
 
+var secret = ["PorkBroth", "Tare", "ScentedOil", "PickledEggs", "Menma", "Chashu", "WheatNoodles", "SpringOnions", "NoriSheets", "Narutomaki"]
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+# Références UI
+@onready var shelf = $UI/IngredientsShelf
+@onready var board = $UI/RecipeBoard
+@onready var feedback = $UI/Feedback
+@onready var validate_button = $UI/Valider
+
+var current_guess := []
+
+func _ready():
+	setup_shelf()
+	setup_board()
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func setup_shelf():
+	for ing in INGREDIENTS:
+		var icon = preload("res://scenes/ingredient_icon.tscn").instantiate()
+		icon.texture = load(ing.picture)
+		icon.ingredient_name = ing.name
+		icon.custom_minimum_size = Vector2(64, 64)
+		shelf.add_child(icon)
+
+
+func setup_board():
+	for i in range(secret.size()):
+		var slot = preload("res://scenes/Slot.tscn").instantiate()
+		slot.texture = load("res://picture/empty_slot.png")
+		slot.custom_minimum_size = Vector2(64, 64)
+		board.add_child(slot)

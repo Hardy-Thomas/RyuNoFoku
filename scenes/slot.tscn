@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bmrw2yq70dm1y"]
+
+[ext_resource type="Script" uid="uid://dmi25td1jd2w" path="res://scripts/slot.gd" id="1_4v6ba"]
+
+[node name="Slot" type="TextureRect"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_4v6ba")
