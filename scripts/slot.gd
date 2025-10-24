@@ -15,17 +15,17 @@ func _ready():
 		if empty_texture:
 			texture = empty_texture
 	
-	print("✅ Slot initialisé: ", name)
+	print("Slot initialisé: ", name)
 
 # FONCTION ABSOLUMENT NÉCESSAIRE
 func _can_drop_data(_at_position, data):
-	print("🎯 _can_drop_data appelé, data: ", data)
+	print("_can_drop_data appelé, data: ", data)
 	return data is Dictionary and data.has("texture")
 
 # FONCTION ABSOLUMENT NÉCESSAIRE  
 func _drop_data(_at_position, data):
-	print("🎯 _drop_data appelé!")
+	print("_drop_data appelé!")
 	if data is Dictionary and data.has("texture"):
 		texture = data["texture"]
 		ingredient_name = data["name"]
-		print("✅ Ingredient déposé: ", ingredient_name)
+		print("Ingredient déposé: ", ingredient_name)

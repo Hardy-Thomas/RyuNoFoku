@@ -33,14 +33,18 @@ func _ready():
 	position_board_bottom()
 	validate_button.pressed.connect(on_validate)
 
+
 func setup_shelf():
+	if shelf is HBoxContainer:
+		convert_to_grid_container(shelf)
+	
 	for ing in INGREDIENTS:
 		var icon = preload("res://scenes/ingredient_icon.tscn").instantiate()
 		icon.texture = load(ing.picture)
 		icon.ingredient_name = ing.name
 		icon.custom_minimum_size = Vector2(64, 64)
-		icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		shelf.add_child(icon)
+
 
 func setup_board():
 	# Vide le board au cas où
@@ -63,6 +67,33 @@ func position_board_bottom():
 	var screen_size = get_viewport().get_visible_rect().size
 	board.position = Vector2(0, screen_size.y - 100)
 	board.size = Vector2(screen_size.x, 80)
+
+
+func convert_to_grid_container(container):
+	var grid = GridContainer.new()
+	grid.name = container.name
+	
+	# Configuration du GridContainer
+	grid.columns = 11  # Nombre d'éléments par ligne
+	grid.add_theme_constant_override("h_separation", 10)
+	grid.add_theme_constant_override("v_separation", 10)
+	
+	# Remplacer l'ancien container
+	var parent = container.get_parent()
+	var index = container.get_index()
+	
+	parent.remove_child(container)
+	parent.add_child(grid)
+	parent.move_child(grid, index)
+	
+	# Mettre à jour la référence
+	if container == shelf:
+		shelf = grid
+	elif container == board:
+		board = grid
+	
+	container.queue_free()
+
 
 func on_validate():
 	var guess = []

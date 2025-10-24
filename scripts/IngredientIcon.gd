@@ -9,7 +9,7 @@ func _ready():
 	expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 
 func _get_drag_data(_at_position):
-	print("🚀 Début du drag pour: ", ingredient_name)
+	print("Début du drag pour: ", ingredient_name)
 	
 	var drag_data = {
 		"name": ingredient_name, 
