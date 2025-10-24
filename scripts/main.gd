@@ -10,13 +10,13 @@ const INGREDIENTS = [
 	{"name": "Menma","category": "trim", "picture": "res://picture/ingredient/Menma.png"},
 	{"name": "Chashu","category": "trim", "picture": "res://picture/ingredient/Chashu.png"},
 	{"name": "RiceNoodles ","category": "Noodles", "picture": "res://picture/ingredient/RiceNoodles.png"},
-	{"name": "WheatNoodles ","category": "Noodles", "picture": "res://picture/ingredient/WheatNoodles.png"},
+	{"name": "WheatNoodles","category": "Noodles", "picture": "res://picture/ingredient/WheatNoodles.png"},
 	{"name": "SpringOnions","category": "condiment", "picture": "res://picture/ingredient/SpringOnions.png"},
 	{"name": "NoriSheets","category": "condiment", "picture": "res://picture/ingredient/NoriSheets.png"},
 	{"name": "Narutomaki","category": "condiment", "picture": "res://picture/ingredient/Narutomaki.png"}
 ]
 
-var secret = ["PorkBroth", "Tare", "ScentedOil", "PickledEggs", "Menma", "Chashu", "WheatNoodles", "SpringOnions", "NoriSheets", "Narutomaki"]
+var secret = ["PorkBroth", "Tare", "ScentedOil", "PickledEggs", "Menma", "Chashu", "SpringOnions", "NoriSheets", "Narutomaki","WheatNoodles"]
 
 
 # Références UI
@@ -37,66 +37,21 @@ func _ready():
 	setup_dropdowns()
 	setup_board()
 	position_board_bottom()
-	validate_button.pressed.connect(on_validate)
-	add_button.pressed.connect(on_add_ingredient)
 
-func organize_ingredients_by_category():
-	ingredients_by_category = {}
-	for ingredient in INGREDIENTS:
-		var category = ingredient["category"]
-		if not ingredients_by_category.has(category):
-			ingredients_by_category[category] = []
-		ingredients_by_category[category].append(ingredient)
 
-func setup_dropdowns():
-	# Setup category dropdown
-	category_dropdown.clear()
-	var categories = ingredients_by_category.keys()
-	categories.sort()
-	
-	for category in categories:
-		category_dropdown.add_item(category.capitalize())
-	
-	# Connect signal
-	category_dropdown.item_selected.connect(on_category_selected)
-	
-	# Setup initial ingredient dropdown
-	update_ingredient_dropdown(0)
 
-func on_category_selected(index):
-	update_ingredient_dropdown(index)
 
-func update_ingredient_dropdown(category_index):
-	ingredient_dropdown.clear()
-	
-	var categories = ingredients_by_category.keys()
-	categories.sort()
-	var selected_category = categories[category_index]
-	var ingredients = ingredients_by_category[selected_category]
-	
-	for ingredient in ingredients:
-		ingredient_dropdown.add_item(ingredient["name"])
 
-func on_add_ingredient():
-	var category_index = category_dropdown.selected
-	var ingredient_index = ingredient_dropdown.selected
+func setup_shelf():
+	if shelf is HBoxContainer:
+		convert_to_grid_container(shelf)
 	
-	var categories = ingredients_by_category.keys()
-	categories.sort()
-	var selected_category = categories[category_index]
-	var ingredients = ingredients_by_category[selected_category]
-	var selected_ingredient = ingredients[ingredient_index]
-	
-	# Ajouter l'ingrédient à la shelf
-	add_ingredient_to_shelf(selected_ingredient)
-
-func add_ingredient_to_shelf(ingredient):
-	var icon = preload("res://scenes/ingredient_icon.tscn").instantiate()
-	icon.texture = load(ingredient["picture"])
-	icon.ingredient_name = ingredient["name"]
-	icon.custom_minimum_size = Vector2(64, 64)
-	icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	shelf.add_child(icon)
+	for ing in INGREDIENTS:
+		var icon = preload("res://scenes/ingredient_icon.tscn").instantiate()
+		icon.texture = load(ing.picture)
+		icon.ingredient_name = ing.name
+		icon.custom_minimum_size = Vector2(64, 64)
+		shelf.add_child(icon)
 
 
 func setup_board():
@@ -180,15 +135,8 @@ func _on_texture_button_pressed() -> void:
 	var guess = ""
 	for slot in board.get_children():
 		if slot is TextureRect and slot.ingredient_name != "":
-			if guess != "":
-				current_guess.append(slot.ingredient_name)
-				guess = guess + " and " + slot.ingredient_name
-			else:
-				guess = "You served a ramen ball with " + slot.ingredient_name
-	var score 
-	var good
-	var valid = validations()
-	score = valid[0]
-	good = valid[1]
-	phone_feedback.display("Anon",guess + "\n You Have got " +str(good) + " ingredients just like your grandmother receipe",score)
+			current_guess.append(slot.ingredient_name)
+			guess = guess + " and " + slot.ingredient_name
+
+	phone_feedback.display(guess)
 	print("Recette proposée :", guess)
