@@ -76,11 +76,14 @@ offset_bottom = 607.0
 flat = true
 
 [node name="TextureButton" type="TextureButton" parent="UI/Valider"]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 7.0
-offset_right = 899.0
-offset_bottom = 605.0
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -2.306
+anchor_bottom = -2.306
+offset_left = -3.0
+offset_top = 0.01599884
+offset_right = 890.0
+offset_bottom = 598.016
 scale = Vector2(0.115, 0.115)
 texture_normal = ExtResource("3_jyhfs")
 texture_pressed = ExtResource("4_tbgi4")
