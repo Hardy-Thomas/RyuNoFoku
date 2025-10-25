@@ -22,7 +22,6 @@ var secret = ["PorkBroth", "Tare", "ScentedOil", "PickledEggs", "Menma", "Chashu
 # Références UI
 @onready var category_dropdown = $UI/IngredientsShelf/CategoryDropdown
 @onready var ingredient_dropdown = $UI/IngredientsShelf/IngredientDropdown
-@onready var add_button = $UI/IngredientsShelf/AddButton
 @onready var shelf = $UI/IngredientsShelf
 @onready var board = $UI/RecipeBoard
 @onready var feedback = $UI/Feedback
@@ -39,7 +38,12 @@ func _ready():
 	setup_board()
 	position_board_bottom()
 	validate_button.pressed.connect(on_validate)
-	add_button.pressed.connect(on_add_ingredient)
+	
+	# SUPPRIMER la connexion du bouton Add et utiliser directement le dropdown
+	ingredient_dropdown.item_selected.connect(on_ingredient_selected)
+	
+	# Créer les icons initiaux
+	update_shelf_icons()
 
 
 func organize_ingredients_by_category():
@@ -67,6 +71,7 @@ func setup_dropdowns():
 
 func on_category_selected(index):
 	update_ingredient_dropdown(index)
+	update_shelf_icons()
 
 func update_ingredient_dropdown(category_index):
 	ingredient_dropdown.clear()
@@ -79,27 +84,42 @@ func update_ingredient_dropdown(category_index):
 	for ingredient in ingredients:
 		ingredient_dropdown.add_item(ingredient["name"])
 
-func on_add_ingredient():
+func on_ingredient_selected(index):
+	# Quand un ingrédient est sélectionné dans le dropdown, créer l'icon directement
 	var category_index = category_dropdown.selected
-	var ingredient_index = ingredient_dropdown.selected
-	
 	var categories = ingredients_by_category.keys()
 	categories.sort()
 	var selected_category = categories[category_index]
 	var ingredients = ingredients_by_category[selected_category]
-	var selected_ingredient = ingredients[ingredient_index]
+	var selected_ingredient = ingredients[index]
 	
-	# Ajouter l'ingrédient à la shelf
-	add_ingredient_to_shelf(selected_ingredient)
+	create_ingredient_icon(selected_ingredient)
 
-func add_ingredient_to_shelf(ingredient):
+func update_shelf_icons():
+	# Vider la shelf actuelle
+	for child in shelf.get_children():
+		if child.has_method("_get_drag_data"): # C'est un IngredientIcon
+			child.queue_free()
+	
+	# Créer les icons pour la catégorie actuelle
+	var category_index = category_dropdown.selected
+	var categories = ingredients_by_category.keys()
+	categories.sort()
+	var selected_category = categories[category_index]
+	var ingredients = ingredients_by_category[selected_category]
+	
+	for ingredient in ingredients:
+		create_ingredient_icon(ingredient)
+
+func create_ingredient_icon(ingredient):
 	var icon = preload("res://scenes/ingredient_icon.tscn").instantiate()
 	icon.texture = load(ingredient["picture"])
 	icon.ingredient_name = ingredient["name"]
 	icon.custom_minimum_size = Vector2(64, 64)
 	icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	shelf.add_child(icon)
-
+	print("Icon créé: ", ingredient["name"])
 
 func setup_board():
 	# Vide le board au cas où
@@ -113,6 +133,7 @@ func setup_board():
 		slot.custom_minimum_size = Vector2(64, 64)
 		slot.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		slot.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		slot.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		
 		board.add_child(slot)
 		print("Slot ", i, " créé - Parent: ", slot.get_parent().name)
