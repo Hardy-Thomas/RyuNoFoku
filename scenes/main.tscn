@@ -34,9 +34,11 @@ offset_bottom = 40.0
 layout_mode = 2
 
 [node name="IngredientDropdown" type="OptionButton" parent="UI/IngredientsShelf"]
+visible = false
 layout_mode = 2
 
 [node name="AddButton" type="Button" parent="UI/IngredientsShelf"]
+visible = false
 layout_mode = 2
 text = "ADD"
 
