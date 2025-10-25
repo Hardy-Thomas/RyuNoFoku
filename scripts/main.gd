@@ -266,6 +266,7 @@ func generate_text_category(missing_dict):
 	
 func on_validate():
 	var guess = []
+
 func _on_texture_button_pressed() -> void:
 	
 	var guess = []
@@ -274,7 +275,7 @@ func _on_texture_button_pressed() -> void:
 
 			current_guess.append(slot.ingredient_name)
 			guess.append(slot.ingredient_name)
-	print(guess)
+	
 	
 	var score 
 	var good
