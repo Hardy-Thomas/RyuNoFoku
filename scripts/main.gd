@@ -33,12 +33,14 @@ var current_guess := []
 var ingredients_by_category := {}
 
 func _ready():
+
 	organize_ingredients_by_category()
 	setup_dropdowns()
 	setup_board()
 	position_board_bottom()
 	validate_button.pressed.connect(on_validate)
 	add_button.pressed.connect(on_add_ingredient)
+
 
 func organize_ingredients_by_category():
 	ingredients_by_category = {}
@@ -60,7 +62,7 @@ func setup_dropdowns():
 	# Connect signal
 	category_dropdown.item_selected.connect(on_category_selected)
 	
-	# Setup initial ingredient dropdown
+	# Setup initiaim", "trim", "trim", "condiment", "condiment", "condiment", "Noodles"]
 	update_ingredient_dropdown(0)
 
 func on_category_selected(index):
@@ -131,7 +133,7 @@ func convert_to_grid_container(container):
 	grid.add_theme_constant_override("h_separation", 10)
 	grid.add_theme_constant_override("v_separation", 10)
 	
-	# Remplacer l'ancien container
+	# Remplacer l'im", "trim", "trim", "condiment", "condiment", "condiment", "Noodles"]
 	var parent = container.get_parent()
 	var index = container.get_index()
 	
@@ -147,6 +149,44 @@ func convert_to_grid_container(container):
 	
 	container.queue_free()
 
+
+#fonction vectoriel qui perme d'obtenir les catégories a partir des noms 
+
+func get_categorys_from_names(NameList):
+	var NameList_categories = NameList.map(
+		func(name):
+			return INGREDIENTS.filter(func(i): return i["name"] == name)[0]["category"]
+	)
+	return NameList_categories
+
+
+
+
+	
+	
+#renvoie un dictionnaire 
+func count_categories(categories):
+	var counts := {}
+	for cat in categories:
+		if counts.has(cat):
+			counts[cat] += 1
+		else:
+			counts[cat] = 1
+	return counts
+
+
+
+
+func check_categories_secret_matching(TheGuess):
+	#on retire les éléments du guess a secret comme ça on se retrouve avec seulement les manquant pour afficher ce qui nous manque
+
+	var remaining = secret.filter(func(i): return i not in TheGuess)
+	var Toto = get_categorys_from_names(remaining)
+	Toto = count_categories(Toto)
+	return Toto
+	
+	
+	
 func validations():
 	var guessed_recipe = []
 	for slot in board.get_children():
@@ -158,29 +198,22 @@ func validations():
 		if ingredient in secret: 
 			score += 1  # bon ingrédient
 			good += 1
-			print(score)
+
 		else:
-			print(ingredient)
-			print(secret)
+
 			if " " == ingredient:
 				print(" ")
 				if not(" " in secret) : 
-					print("VOVOOVOVOOVOVOODSFJFGMKSDJGHMLKSDJGFMLKDSMLKGMSLDKGMDSKGMLKSDGMKDSMLGK") 
-			score -= 2  # ingrédient mauvais ingrédient
-			print("MALUS")
+					score -= 2  # ingrédient mauvais ingrédient
+
 
 	#MISSING INGREDIENT YOU SUCK LOL
 	for ingredient in secret:
 		if ingredient not in guessed_recipe:
 			print(ingredient)
-			score -= 1  # ingrédient manquant 
-			print("looser")
-		#BON J'AI IMPROVISE LE SCORRING
-	print('HAAAAAAAAAAAAAAAa')
-	
-	print(score)
-	print(score/len(secret))
-	print(score*5/len(secret))	
+			score -= 1  # ingrédient manquant condiment
+
+		#BON J'AI IMPROVISE LE SCORRINGcondimentcondiment
 	score = score/len(secret)*5
 
 	if score < 0:
@@ -188,10 +221,37 @@ func validations():
 		
 	print("Score final :", score)
 	return [score,good]
+var missing_ingredients = {
+	"Broth": 1,
+	"Tare": 1,
+	"ScentedOil": 1,
+	"trim": 3,
+	"condiment": 3,
+	"Noodles": 1
+}
 
+func generate_text_category(missing_dict):
+	var parts: Array = []
+	for k in missing_dict.keys():
+		var v = missing_dict[k]
+		var name = k if v == 1 else k + "s"
+		parts.append(str(v) + " " + name)
+	
+	var text: String
+	if parts.size() > 1:
+		text = ", ".join(parts.slice(0, parts.size() - 1)) + " and " + parts[-1]
+	else:
+		text = parts[0]
+	return "Your grandma’s recipe called for %s, but it looks like you forgot to add them." % text
+
+
+
+	
+	
 func on_validate():
 	var guess = []
 func _on_texture_button_pressed() -> void:
+	
 	var guess = ""
 	for slot in board.get_children():
 		if slot is TextureRect and slot.ingredient_name != "":
@@ -205,5 +265,9 @@ func _on_texture_button_pressed() -> void:
 	var valid = validations()
 	score = valid[0]
 	good = valid[1]
-	phone_feedback.display("Anon",guess + "\n You Have got " +str(good) + " ingredients just like your grandmother receipe",score)
+	print(generate_text_category(check_categories_secret_matching(guess)))
+	phone_feedback.display("Anon",generate_text_category(check_categories_secret_matching(guess)) ,score)
+
+	#phone_feedback.display("Anon",guess + "\n You Have got " +str(good) + " ingredients just like your grandmother receipe",score)
 	print("Recette proposée :", guess)
+	check_categories_secret_matching(guess)

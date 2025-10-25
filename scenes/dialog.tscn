@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://c0bbudwwfhd02"]
 
 [ext_resource type="Texture2D" uid="uid://cdvrpnu2a5voo" path="res://picture/sprite/Rating/phone.png" id="1_pkx4w"]
-[ext_resource type="Script" uid="uid://brb0vewjfuu5x" path="res://scenes/dialog.gd" id="2_36pgd"]
+[ext_resource type="Script" uid="uid://brb0vewjfuu5x" path="res://scripts/dialog.gd" id="2_36pgd"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_36pgd"]
 texture = ExtResource("1_pkx4w")

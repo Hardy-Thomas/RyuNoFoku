@@ -25,6 +25,4 @@ func _get_drag_data(_at_position):
 	preview.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	
 	set_drag_preview(preview)
-	
-	print("🚀 Drag data créé: ", drag_data)
 	return drag_data
