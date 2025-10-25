@@ -1,0 +1,360 @@
+MAIN
+
+extends Node2D
+
+const INGREDIENTS = [
+	{"name": "ChickenBroth","category": "Broth", "picture": "res://picture/ingredient/ChickenBroth.png"},
+	{"name": "VegetableBroth","category": "Broth", "picture": "res://picture/ingredient/VegetableBroth.png"},
+	{"name": "PorkBroth","category": "Broth", "picture": "res://picture/ingredient/PorkBroth.png"},
+	{"name": "Tare","category": "Tare", "picture": "res://picture/ingredient/Tare.png"},
+	{"name": "ScentedOil","category": "ScentedOil", "picture": "res://picture/ingredient/ScentedOil.png"},
+	{"name": "PickledEggs","category": "trim", "picture": "res://picture/ingredient/PickledEggs.png"},
+	{"name": "Menma","category": "trim", "picture": "res://picture/ingredient/Menma.png"},
+	{"name": "Chashu","category": "trim", "picture": "res://picture/ingredient/Chashu.png"},
+	{"name": "RiceNoodles ","category": "Noodles", "picture": "res://picture/ingredient/RiceNoodles.png"},
+	{"name": "WheatNoodles","category": "Noodles", "picture": "res://picture/ingredient/WheatNoodles.png"},
+	{"name": "SpringOnions","category": "condiment", "picture": "res://picture/ingredient/SpringOnions.png"},
+	{"name": "NoriSheets","category": "condiment", "picture": "res://picture/ingredient/NoriSheets.png"},
+	{"name": "Narutomaki","category": "condiment", "picture": "res://picture/ingredient/Narutomaki.png"}
+]
+
+var secret = ["PorkBroth", "Tare", "ScentedOil", "PickledEggs", "Menma", "Chashu", "SpringOnions", "NoriSheets", "Narutomaki","WheatNoodles"]
+
+
+# Références UI
+@onready var category_dropdown = $UI/IngredientsShelf/CategoryDropdown
+@onready var ingredient_dropdown = $UI/IngredientsShelf/IngredientDropdown
+@onready var shelf = $UI/IngredientsShelf
+@onready var board = $UI/RecipeBoard
+@onready var feedback = $UI/Feedback
+@onready var validate_button = $UI/Valider
+@onready var phone_feedback = $UI/dialog
+
+var current_guess := []
+var ingredients_by_category := {}
+
+func _ready():
+
+	organize_ingredients_by_category()
+	setup_dropdowns()
+	setup_board()
+	position_board_bottom()
+	validate_button.pressed.connect(on_validate)
+	
+	# SUPPRIMER la connexion du bouton Add et utiliser directement le dropdown
+	ingredient_dropdown.item_selected.connect(on_ingredient_selected)
+	
+	# Créer les icons initiaux
+	update_shelf_icons()
+	print(guess)
+
+func organize_ingredients_by_category():
+	ingredients_by_category = {}
+	for ingredient in INGREDIENTS:
+		var category = ingredient["category"]
+		if not ingredients_by_category.has(category):
+			ingredients_by_category[category] = []
+		ingredients_by_category[category].append(ingredient)
+
+func setup_dropdowns():
+	# Setup category dropdown
+	category_dropdown.clear()
+	var categories = ingredients_by_category.keys()
+	categories.sort()
+	
+	for category in categories:
+		category_dropdown.add_item(category.capitalize())
+	# Retourne la catégorie d'un ingrédient
+
+func on_category_selected(index):
+	update_ingredient_dropdown(index)
+	update_shelf_icons()
+
+func update_ingredient_dropdown(category_index):
+	ingredient_dropdown.clear()
+	
+	var categories = ingredients_by_category.keys()
+	categories.sort()
+	var selected_category = categories[category_index]
+	var ingredients = ingredients_by_category[selected_category]
+	
+	for ingredient in ingredients:
+		ingredient_dropdown.add_item(ingredient["name"])
+
+func on_ingredient_selected(index):
+	# Quand un ingrédient est sélectionné dans le dropdown, créer l'icon directement
+	var category_index = category_dropdown.selected
+	var categories = ingredients_by_category.keys()
+	categories.sort()
+	var selected_category = categories[category_index]
+	var ingredients = ingredients_by_category[selected_category]
+	var selected_ingredient = ingredients[index]
+	
+	create_ingredient_icon(selected_ingredient)
+
+func update_shelf_icons():
+	# Vider la shelf actuelle
+	for child in shelf.get_children():
+		if child.has_method("_get_drag_data"): # C'est un IngredientIcon
+			child.queue_free()
+	
+	# Créer les icons pour la catégorie actuelle
+	var category_index = category_dropdown.selected
+	var categories = ingredients_by_category.keys()
+	categories.sort()
+	var selected_category = categories[category_index]
+	var ingredients = ingredients_by_category[selected_category]
+	
+	for ingredient in ingredients:
+		create_ingredient_icon(ingredient)
+
+func create_ingredient_icon(ingredient):
+	var icon = preload("res://scenes/ingredient_icon.tscn").instantiate()
+	icon.texture = load(ingredient["picture"])
+	icon.ingredient_name = ingredient["name"]
+	icon.custom_minimum_size = Vector2(64, 64)
+	icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	shelf.add_child(icon)	print(guess)
+	print("Icon créé: ", ingredient["name"])
+
+func setup_board():
+	# Vide le board au cas où
+	for child in board.get_children():
+		child.queue_free()
+	
+	for i in range(secret.size()):
+		var slot = preload("res://scenes/slot.tscn").instantiate()
+		
+		# Configuration critique
+		slot.custom_minimum_size = Vector2(64, 64)
+		slot.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		slot.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		slot.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		
+		board.add_child(slot)
+		print("Slot ", i, " créé - Parent: ", slot.get_parent().name)
+
+func position_board_bottom():
+	# Positionnement plus robuste
+	var screen_size = get_viewport().get_visible_rect().size
+	board.position = Vector2(0, screen_size.y - 100)
+	board.size = Vector2(screen_size.x, 80)
+
+
+func convert_to_grid_container(container):
+	var grid = GridContainer.new()
+	grid.name = container.name
+	
+	# Configuration du GridContainer
+	grid.columns = 11  # Nombre d'éléments par ligne
+	grid.add_theme_constant_override("h_separation", 10)
+	grid.add_theme_constant_override("v_separation", 10)
+	
+	# Remplacer l'im", "trim", "trim", "condiment", "condiment", "condiment", "Noodles"]
+	var parent = container.get_parent()
+	var index = container.get_index()
+	
+	parent.remove_child(container)
+	parent.add_child(grid)
+	parent.move_child(grid, index)
+	
+	# Mettre à jour la référence
+	if container == shelf:
+		shelf = grid
+	elif container == board:
+		board = grid
+	
+	container.queue_free()
+
+
+#fonction vectoriel qui perme d'obtenir les catégories not_matchin_ingredient(liste1: Array, liste2: Array)a partir des noms 
+
+func get_categorys_from_names(NameList):
+	var NameList_categories = NameList.map(
+		func(name):
+			return INGREDIENTS.filter(func(i): return i["name"] == name)[0]["category"]
+	)
+	return NameList_categories
+
+
+
+
+	
+	
+#renvoie un dictionnaire 
+func count_categories(categories):
+	var counts := {}
+	for cat in categories:
+		if counts.has(cat):
+			counts[cat] += 1
+		else:
+			counts[cat] = 1
+	return counts
+
+
+
+
+func check_categories_secret_matching(TheGuess):
+	#on retire les éléments du guess a secret comme ça on se retrouve avec seulement les manquant pour afficher ce qui nous manque
+
+	var remaining = secret.filter(func(i): return i not in TheGuess)
+	var Toto = get_categorys_from_names(remaining)
+	Toto = count_categories(Toto)
+	return Toto
+	
+	
+	
+func validations():
+	var guessed_recipe = []
+	for slot in board.get_children():
+		if slot is TextureRect and slot.ingredient_name != "":
+			guessed_recipe.append(slot.ingredient_name)
+	var good = 0 #comptabilisation des bons ingrédients
+	var score = 0.0
+	for ingredient in guessed_recipe:
+		if ingredient in secret: 
+			score += 1  # bon ingrédient
+			good += 1
+
+		else:
+
+			if " " == ingredient:
+				print(" ")
+				if not(" " in secret) : 
+					score -= 2  # ingrédient mauvais ingrédient
+
+
+	#MISSING INGREDIENT YOU SUCK LOL
+	for ingredient in secret:
+		if ingredient not in guessed_recipe:
+			print(ingredient)
+			score -= 1  # ingrédient manquant condiment
+
+		#BON J'AI IMPROVISE LE SCORRINGcondimentcondiment
+	score = score/len(secret)*5
+
+	if score < 0:
+		score = 0
+		
+	print("Score final :", score)
+	return [score,good]
+var missing_ingredients = {
+	"Broth": 1,
+	"Tare": 1,
+	"ScentedOil": 1,
+	"trim": 3,
+	"condiment": 3,
+	"Noodles": 1
+}
+
+func generate_text_category(missing_dict):
+	var parts: Array = []
+	for k in missing_dict.keys():
+		var v = missing_dict[k]
+		var name = k if v == 1 else k + "s"
+		parts.append(str(v) + " " + name)
+	
+	var text: String
+	if parts.size() > 1:
+		text = ", ".join(parts.slice(0, parts.size() - 1)) + " and " + parts[-1]
+	else:
+		text = parts[0]
+	return "Your grandma’s recipe called for %s, but it looks like you forgot to add them." % text
+
+
+
+	
+	
+func on_validate():
+	var guess = []
+
+func _on_texture_button_pressed() -> void:
+	
+	var guess = []
+	for slot in board.get_children():
+		if slot is TextureRect and slot.ingredient_name != "":
+
+			current_guess.append(slot.ingredient_name)
+			guess.append(slot.ingredient_name)
+	
+	
+	var score 
+	var good
+	var valid = validations()
+	score = valid[0]
+	good = valid[1]
+	print(generate_text_category(check_categories_secret_matching(guess)))
+	phone_feedback.display("Anon",generate_text_category(check_categories_secret_matching(guess)) ,score)
+
+	#phone_feedback.display("Anon",guess + "\n You Have got " +str(good) + " ingredients just like your grandmother receipe",score)
+	print("Recette proposée :", guess)
+	check_categories_secret_matching(guess)
+
+
+MAIN 
+extends Control
+
+@onready var _customer : Label = $VBoxContainer/Name
+@onready var _Grade : Label = $VBoxContainer/Grade
+@onready var _Note : Label = $VBoxContainer/Note
+
+
+func display(Name: String,Line : String = "", Grade : float = -1):
+	_customer.text = Name
+	_Grade.text = str(Grade) + "/5"
+	_Note.text = Line
+	open()
+func open():
+	visible = true
+	
+func close():
+	visible = false
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass
+
+func not_matchin_ingredient(liste1: Array, liste2: Array) -> Array:
+	var liste3 =[]
+	# Renvoie les éléments de liste1 qui ne sont pas dans liste2
+	for item in liste1 :
+		if not(item in liste2):
+			liste3.append(item) 
+	return liste3
+func get_cat(ingredients: Array, secret: Array, ingredient: String) -> String:
+	for item in ingredients:
+		if item["name"] == ingredient:
+			return item["category"]
+	return "Unknown"
+
+
+func count_cat(cat_list: Array) -> Dictionary:
+	var counts: Dictionary = {}
+	for cat in cat_list:
+		if counts.has(cat):
+			counts[cat] += 1
+		else:
+			counts[cat] = 1
+	return counts
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func grandma_text(missing_dict: Dictionary) -> String:
+	var parts: Array = []
+	for k in missing_dict.keys():
+		var v = missing_dict[k]
+		var name = k if v == 1 else k + "s"
+		parts.append(str(v) + " " + name)
+	
+	var text: String
+	if parts.size() > 1:
+		text = ", ".join(parts.slice(0, parts.size() - 1)) + " and " + parts[-1]
+	else:
+		text = parts[0]
+	
+	return "Your ancient grandma’s recipe called for %s, but it looks like you forgot to add them. " % text
+
+
+func _on_button_pressed() -> void:
+
+	close()
+
+
