@@ -1,19 +1,19 @@
 extends Node2D
 
 const INGREDIENTS = [
-	{"name": "ChickenBroth","category": "Broth", "picture": "res://picture/ingredient/ChickenBroth.png"},
-	{"name": "VegetableBroth","category": "Broth", "picture": "res://picture/ingredient/VegetableBroth.png"},
-	{"name": "PorkBroth","category": "Broth", "picture": "res://picture/ingredient/PorkBroth.png"},
-	{"name": "Tare","category": "Tare", "picture": "res://picture/ingredient/Tare.png"},
-	{"name": "ScentedOil","category": "ScentedOil", "picture": "res://picture/ingredient/ScentedOil.png"},
-	{"name": "PickledEggs","category": "trim", "picture": "res://picture/ingredient/PickledEggs.png"},
-	{"name": "Menma","category": "trim", "picture": "res://picture/ingredient/Menma.png"},
-	{"name": "Chashu","category": "trim", "picture": "res://picture/ingredient/Chashu.png"},
-	{"name": "RiceNoodles ","category": "Noodles", "picture": "res://picture/ingredient/RiceNoodles.png"},
-	{"name": "WheatNoodles","category": "Noodles", "picture": "res://picture/ingredient/WheatNoodles.png"},
-	{"name": "SpringOnions","category": "condiment", "picture": "res://picture/ingredient/SpringOnions.png"},
-	{"name": "NoriSheets","category": "condiment", "picture": "res://picture/ingredient/NoriSheets.png"},
-	{"name": "Narutomaki","category": "condiment", "picture": "res://picture/ingredient/Narutomaki.png"}
+	{"name": "ChickenBroth","category": "Broth", "picture": "res://picture/sprite/ingrédient/ChickenBroth.jpg"},
+	{"name": "VegetableBroth","category": "Broth", "picture": "res://picture/sprite/ingrédient/VegetableBroth.jpg"},
+	{"name": "PorkBroth","category": "Broth", "picture": "res://picture/sprite/ingrédient/PorkBroth.jpg"},
+	{"name": "Tare","category": "Tare", "picture": "res://picture/sprite/ingrédient/Tare.jpg"},
+	{"name": "ScentedOil","category": "ScentedOil", "picture": "res://picture/sprite/ingrédient/ScentedOil.jpg"},
+	{"name": "PickledEggs","category": "trim", "picture": "res://picture/sprite/ingrédient/PickledEggs.jpg"},
+	{"name": "Menma","category": "trim", "picture": "res://picture/sprite/ingrédient/Menma.jpg"},
+	{"name": "Chashu","category": "trim", "picture": "res://picture/sprite/ingrédient/Chashu.jpg"},
+	{"name": "RiceNoodles ","category": "Noodles", "picture": "res://picture/sprite/ingrédient/RiceNoodles.jpg"},
+	{"name": "WheatNoodles","category": "Noodles", "picture": "res://picture/sprite/ingrédient/WheatNoodles.jpg"},
+	{"name": "SpringOnions","category": "condiment", "picture": "res://picture/sprite/ingrédient/SpringOnions.jpg"},
+	{"name": "NoriSheets","category": "condiment", "picture": "res://picture/sprite/ingrédient/NoriSheets.jpg"},
+	{"name": "Narutomaki","category": "condiment", "picture": "res://picture/sprite/ingrédient/Narutomaki.jpg"}
 ]
 
 var secret = ["PorkBroth", "Tare", "ScentedOil", "PickledEggs", "Menma", "Chashu", "SpringOnions", "NoriSheets", "Narutomaki","WheatNoodles"]

@@ -71,21 +71,21 @@ grow_vertical = 1
 
 [node name="Valider" type="Button" parent="UI"]
 layout_mode = 0
-offset_left = 1040.0
-offset_top = 571.0
-offset_right = 1110.0
-offset_bottom = 607.0
+offset_left = 1010.0
+offset_top = 488.0
+offset_right = 1080.0
+offset_bottom = 524.0
 flat = true
 
 [node name="TextureButton" type="TextureButton" parent="UI/Valider"]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = -2.306
-anchor_bottom = -2.306
-offset_left = -3.0
-offset_top = 0.01599884
-offset_right = 890.0
-offset_bottom = 598.016
+anchor_top = -2.283
+anchor_bottom = -2.283
+offset_left = 24.0
+offset_top = 78.188
+offset_right = 917.0
+offset_bottom = 676.188
 scale = Vector2(0.115, 0.115)
 texture_normal = ExtResource("3_jyhfs")
 texture_pressed = ExtResource("4_tbgi4")

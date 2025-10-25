@@ -11,7 +11,7 @@ func _ready():
 	
 	# Texture vide par défaut
 	if texture == null:
-		var empty_texture = load("res://picture/empty_slot.png")
+		var empty_texture = load("res://picture/sprite/ingrédient/slot.jpg")
 		if empty_texture:
 			texture = empty_texture
 	
