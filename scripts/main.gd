@@ -62,12 +62,7 @@ func setup_dropdowns():
 	
 	for category in categories:
 		category_dropdown.add_item(category.capitalize())
-	
-	# Connect signal
-	category_dropdown.item_selected.connect(on_category_selected)
-	
-	# Setup initiaim", "trim", "trim", "condiment", "condiment", "condiment", "Noodles"]
-	update_ingredient_dropdown(0)
+	# Retourne la catégorie d'un ingrédient
 
 func on_category_selected(index):
 	update_ingredient_dropdown(index)
@@ -171,7 +166,7 @@ func convert_to_grid_container(container):
 	container.queue_free()
 
 
-#fonction vectoriel qui perme d'obtenir les catégories a partir des noms 
+#fonction vectoriel qui perme d'obtenir les catégories not_matchin_ingredient(liste1: Array, liste2: Array)a partir des noms 
 
 func get_categorys_from_names(NameList):
 	var NameList_categories = NameList.map(
@@ -273,14 +268,14 @@ func on_validate():
 	var guess = []
 func _on_texture_button_pressed() -> void:
 	
-	var guess = ""
+	var guess = []
 	for slot in board.get_children():
 		if slot is TextureRect and slot.ingredient_name != "":
-			if guess != "":
-				current_guess.append(slot.ingredient_name)
-				guess = guess + " and " + slot.ingredient_name
-			else:
-				guess = "You served a ramen ball with " + slot.ingredient_name
+
+			current_guess.append(slot.ingredient_name)
+			guess.append(slot.ingredient_name)
+	print(guess)
+	
 	var score 
 	var good
 	var valid = validations()
