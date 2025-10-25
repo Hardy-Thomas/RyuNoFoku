@@ -32,7 +32,8 @@ var current_guess := []
 var ingredients_by_category := {}
 
 func _ready():
-
+	print("dificulty :", Global.difficulty)
+	test_difficulty()
 	organize_ingredients_by_category()
 	setup_dropdowns()
 	setup_board()
@@ -203,6 +204,46 @@ func check_categories_secret_matching(TheGuess):
 	
 	
 	
+
+func randomize_secret():
+	var available_ingredients = INGREDIENTS.duplicate()
+	var new_secret = []
+	
+	var exclusive_categories = ["Broth", "Noodles"]
+	var used_categories = {}
+	
+	var num_ingredients = randi() % (available_ingredients.size() - 5) + 5
+	
+	while new_secret.size() < num_ingredients and available_ingredients.size() > 0:
+		var random_index = randi() % available_ingredients.size()
+		var ingredient = available_ingredients[random_index]
+		
+		var can_add = true
+		
+		if ingredient["category"] in exclusive_categories:
+			if used_categories.has(ingredient["category"]):
+				can_add = false
+		
+		if can_add:
+			new_secret.append(ingredient["name"])
+			
+			if ingredient["category"] in exclusive_categories:
+				used_categories[ingredient["category"]] = true
+			
+			available_ingredients.remove_at(random_index)
+		else:
+			available_ingredients.remove_at(random_index)
+	
+	secret = new_secret
+	return new_secret
+
+func test_difficulty():
+	if Global.difficulty == "random":
+		randomize_secret()
+		print("secret :", secret)
+
+
+
 func validations():
 	var guessed_recipe = []
 	for slot in board.get_children():

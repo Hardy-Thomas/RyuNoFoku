@@ -1,0 +1,36 @@
+[gd_scene load_steps=2 format=3 uid="uid://42hg01k2pivp"]
+
+[ext_resource type="Script" uid="uid://dhxakkekd2p1e" path="res://scripts/title_screen.gd" id="1_fgkus"]
+
+[node name="TitleScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_fgkus")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GameTitle" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="MenuButtons" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="PlayButton" type="Button" parent="MenuButtons"]
+layout_mode = 2
+text = "Normal"
+
+[node name="OptionsButton" type="Button" parent="MenuButtons"]
+layout_mode = 2
+text = "Random"
+
+[node name="QuitButton" type="Button" parent="MenuButtons"]
+layout_mode = 2
