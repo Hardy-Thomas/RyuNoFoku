@@ -32,8 +32,6 @@ var current_guess := []
 var ingredients_by_category := {}
 
 func _ready():
-	print("dificulty :", Global.difficulty)
-	test_difficulty()
 	organize_ingredients_by_category()
 	setup_dropdowns()
 	setup_board()
@@ -45,7 +43,6 @@ func _ready():
 	
 	# Créer les icons initiaux
 	update_shelf_icons()
-
 
 func organize_ingredients_by_category():
 	ingredients_by_category = {}
@@ -63,7 +60,12 @@ func setup_dropdowns():
 	
 	for category in categories:
 		category_dropdown.add_item(category.capitalize())
-	# Retourne la catégorie d'un ingrédient
+	
+	# Connect signal
+	category_dropdown.item_selected.connect(on_category_selected)
+	
+	# Setup initial ingredient dropdown
+	update_ingredient_dropdown(0)
 
 func on_category_selected(index):
 	update_ingredient_dropdown(index)
