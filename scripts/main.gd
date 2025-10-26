@@ -32,6 +32,7 @@ var current_guess := []
 var ingredients_by_category := {}
 
 func _ready():
+	test_difficulty()
 	organize_ingredients_by_category()
 	setup_dropdowns()
 	setup_board()
@@ -300,7 +301,8 @@ func generate_text_category(missing_dict):
 	if parts.size() > 1:
 		text = ", ".join(parts.slice(0, parts.size() - 1)) + " and " + parts[-1]
 	else:
-		text = parts[0]
+		
+		text = ''
 	return "Your grandma’s recipe called for %s, but it looks like you forgot to add them." % text
 
 
