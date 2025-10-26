@@ -333,3 +333,7 @@ func _on_texture_button_pressed() -> void:
 	#phone_feedback.display("Anon",guess + "\n You Have got " +str(good) + " ingredients just like your grandmother receipe",score)
 	print("Recette proposée :", guess)
 	check_categories_secret_matching(guess)
+
+
+func _on_restart_pressed():
+	get_tree().change_scene_to_file("res://scenes/title_screen.tscn")

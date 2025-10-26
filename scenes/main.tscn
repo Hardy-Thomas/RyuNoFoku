@@ -90,4 +90,13 @@ scale = Vector2(0.115, 0.115)
 texture_normal = ExtResource("3_jyhfs")
 texture_pressed = ExtResource("4_tbgi4")
 
+[node name="Restart" type="Button" parent="UI"]
+layout_mode = 0
+offset_left = 1073.0
+offset_top = 12.0
+offset_right = 1138.0
+offset_bottom = 46.0
+text = "Restart"
+
 [connection signal="pressed" from="UI/Valider/TextureButton" to="." method="_on_texture_button_pressed"]
+[connection signal="pressed" from="UI/Restart" to="." method="_on_restart_pressed"]
